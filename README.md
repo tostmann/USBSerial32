@@ -82,9 +82,18 @@ Jede Zahl ist belegt, keine geraten — Herkunft steht in `main/board.h`.
   by-id/...A0:F2:...` scheitert mit "Too many arguments for tpuart!". Also
   `/dev/ttyACMn` nehmen (wandert bei Re-Enumeration) oder per udev-Regel einen
   Symlink ohne Doppelpunkte anlegen.
-- **EUL/C6 und EUL/C3 gebaut, aber noch nicht auf Hardware geprueft.** Der
-  EUL-Zweig braucht ein EUL32 mit TCM515; EUL-C6 ist noch nicht im Handel.
-  Bis dahin gilt fuer die beiden: Layout geprueft, Funktion nicht.
+- **EUL/C6 auf Hardware verifiziert** (2026-08-01, EUL32): Banner
+  `TCM515 OK @460800 baud, 229 ms, 1 Versuch`; CO_RD_VERSION durch die
+  Bruecke beantwortet mit desc `TCM515`, app 1.6.1.0, chipid 042ADCA4 --
+  deckungsgleich mit dem in `selftest-fw/boards/eul32.h` dokumentierten Befund.
+- **EUL/C3 auf Hardware verifiziert** (2026-08-01, Legacy-EUL): gleiches Bild,
+  chipid 042D74B5.
+
+  Dabei gefunden: **der SET-Pin muss LOW sein.** Mit SET HIGH laeuft der
+  TCM515 im Programmiermodus und antwortet nur bei 57600 statt 460800 -- der
+  Baudraten-Fallback des Probes verdeckt das, die Bruecke funktioniert dann
+  im falschen Modus. Aufgefallen ist es nur, weil der Banner die tatsaechlich
+  verwendete Baudrate nennt.
 
 Ein Boot-Banner sieht so aus:
 
