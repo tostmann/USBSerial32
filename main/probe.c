@@ -49,7 +49,18 @@ void bw_probe_init(void)
         .intr_type    = GPIO_INTR_DISABLE,
     };
     gpio_config(&io);
-    gpio_set_level(BW_TCM_SET, 1);
+    // SET LOW = Normalbetrieb mit 460800.  Drei Belege, die sich decken:
+    //   * busware-esp32 lib/busware/busware.cpp, TCMTransceiver::begin():
+    //     turboPIN wird auf LOW gezogen, dann _baud = 460800 -- so laeuft die
+    //     Legacy-Firmware im Feld;
+    //   * selftest-fw/boards/eul32.h nennt 460800 "normal" und 57600
+    //     "programming baud";
+    //   * gemessen 2026-08-01: mit SET HIGH antwortete das Referenzmodul auf
+    //     dem EUL32 NUR bei 57600, mit SET LOW bei 460800 -- dasselbe Modul,
+    //     chipid 042ADCA4.
+    // Mit SET HIGH laeuft das Modul also im Programmiermodus; der
+    // Baudraten-Fallback des Probes verdeckt das, weil er dort Antwort bekommt.
+    gpio_set_level(BW_TCM_SET, 0);
     gpio_set_level(BW_TCM_RST, 1);
 #endif
     uart_open(s_bauds[s_baud_idx]);
