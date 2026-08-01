@@ -1,0 +1,16 @@
+# USBSerial32 -- 4 MB, wie sie auf TUL32/EUL32 (ESP32-C6FH4) und den
+# C3-Sticks verbaut sind.
+#
+# Bewusst OHNE OTA-Slots: die Bruecke hat keinen OTA-Pfad, und eine
+# ota_0/ota_1-Tabelle ohne beschriebene otadata ist genau die Falle, in die
+# das alte C6-Image gelaufen ist -- dort lag die App in ota_0, waehrend der
+# Bootloader die leere factory-Partition zuerst probierte, zwei Fehlerzeilen
+# in den Nutzdatenstrom schrieb und 1 MB Flash verschenkte.
+#
+# Die App steht hier dort, wo der Bootloader sie ohne otadata sucht: factory.
+#
+# Name,     Type, SubType,  Offset,   Size,     Flags
+nvs,        data, nvs,      0x9000,   0x6000,
+phy_init,   data, phy,      0xf000,   0x1000,
+factory,    app,  factory,  0x10000,  0x180000,
+coredump,   data, coredump, 0x190000, 0x10000,

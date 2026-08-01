@@ -1,0 +1,36 @@
+# Gemeinsame Vorgaben fuer alle vier Ziele (tul/eul x c3/c6).
+
+# --- Flash ------------------------------------------------------------------
+# 4 MB ist keine Bequemlichkeit, sondern Pflicht: das C6FH4-Modul auf TUL32 und
+# EUL32 hat 4 MB embedded Flash.  Ein Image, dessen Bootloader-Header 8 MB
+# behauptet, bootloopt auf diesen Modulen -- und ein erfolgreiches "idf.py
+# flash" beweist das NICHT, weil esptool den Header beim Schreiben still auf
+# die erkannte Groesse korrigiert.  Im vorgemergten Factory-Image bleibt er
+# stehen.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="4MB"
+
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions_4m.csv"
+
+# --- Stille -----------------------------------------------------------------
+# Die Firmware ist eine BYTE-TRANSPARENTE Bruecke: alles, was ausser Nutzdaten
+# auf dem USB-Endpunkt erscheint, landet im Datenstrom des Hosts, vor dessen
+# erstem Protokollbyte.  Konsole und Log sind deshalb aus; die einzige Ausgabe
+# ist der Banner in serial_bridge.c, und der wird bewusst geschrieben.
+CONFIG_ESP_CONSOLE_NONE=y
+CONFIG_BOOTLOADER_LOG_LEVEL_NONE=y
+CONFIG_BOOTLOADER_LOG_LEVEL=0
+CONFIG_LOG_DEFAULT_LEVEL_NONE=y
+CONFIG_LOG_DEFAULT_LEVEL=0
+
+# --- Diagnose ---------------------------------------------------------------
+# Coredump in die dafuer vorgesehene Partition. Ohne sie meckert der Startcode
+# bei jedem Boot ("No core dump partition found") -- beim alten Image zwei
+# Zeilen mitten im Nutzdatenstrom.
+CONFIG_ESP_COREDUMP_ENABLE_TO_FLASH=y
+CONFIG_ESP_COREDUMP_DATA_FORMAT_ELF=y
+
+# --- USB --------------------------------------------------------------------
+# Der Host darf den Stick abziehen/schliessen, ohne dass die Bruecke haengt.
+CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
