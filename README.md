@@ -58,12 +58,18 @@ Jede Zahl ist belegt, keine geraten — Herkunft steht in `main/board.h`.
 ## Stand
 
 - **TUL/C6 auf Hardware verifiziert** (2026-08-01, TUL32 mit angeklemmtem
-  KNX-Bus): sauberer Boot, Banner `NCN5130 OK @38400 baud`, und durch die
-  Bruecke `U_Reset.req`→`0x03`, `U_State.req`→`0x07`,
+  KNX-Bus): sauberer Boot, Banner `NCN5130 OK @38400 baud, 299 ms, 1 Versuch`,
+  und durch die Bruecke `U_Reset.req`→`0x03`, `U_State.req`→`0x07`,
   `U_SystemStat.req`→`0x4B 0xFB` (alle Rails gesetzt, Mode Normal).
-- **EUL/C6, TUL/C3, EUL/C3 gebaut, aber noch nicht auf Hardware geprueft.**
-  Der EUL-Zweig braucht ein EUL32 mit TCM515; der C3-Zweig einen Legacy-Stick.
-  Bis dahin gilt fuer diese drei: Layout geprueft, Funktion nicht.
+- **TUL/C3 auf Hardware verifiziert** (2026-08-01, fabrikfrischer TUL-C3):
+  gleiches Bild, derselbe vollstaendige NCN-Dialog — aber Banner
+  `NCN5130 OK @38400 baud, 749 ms, 2 Versuche`.
+  **Der erste Probe-Versuch schlug fehl.** Die Hardware war dabei einwandfrei.
+  Genau dieses Board haette mit der Altfirmware, die nur einmal fragt, ein
+  FAIL gemeldet — der Grund, warum der Probe hier wiederholt.
+- **EUL/C6 und EUL/C3 gebaut, aber noch nicht auf Hardware geprueft.** Der
+  EUL-Zweig braucht ein EUL32 mit TCM515; EUL-C6 ist noch nicht im Handel.
+  Bis dahin gilt fuer die beiden: Layout geprueft, Funktion nicht.
 
 Ein Boot-Banner sieht so aus:
 
