@@ -67,6 +67,21 @@ Jede Zahl ist belegt, keine geraten — Herkunft steht in `main/board.h`.
   **Der erste Probe-Versuch schlug fehl.** Die Hardware war dabei einwandfrei.
   Genau dieses Board haette mit der Altfirmware, die nur einmal fragt, ein
   FAIL gemeldet — der Grund, warum der Probe hier wiederholt.
+- **Self-healing auf Hardware bewiesen** (2026-08-01, TUL32-C6 am Pruefplatz):
+  Stick ohne Busspannung gestartet -> nach 5 s Banner `NCN5130 meldet sich
+  nicht (Busspannung?)`; Bus danach zugeschaltet -> nach 59,3 s und 39
+  Versuchen von selbst `NCN5130 OK @38400 baud`. Ohne Reset, ohne Eingriff.
+- **knxd-Test bestanden** (knxd 0.14.73, beide Chips): `01`->`03` RESET_ACK,
+  `02`->`07` `is_online`, danach Keepalive alle 10 s -- und ueber 40 s Laufzeit
+  KEIN Fremdbyte in beide Richtungen, der Test schweigt ab dem ersten
+  Host-Byte.
+
+  Stolperstein fuer Nutzer: **knxd kann die by-id-Pfade dieser Sticks nicht
+  verarbeiten** -- es trennt das Backend-Argument an Doppelpunkten, und der
+  by-id-Name nativer C3/C6 enthaelt immer die MAC. `-b tpuart:/dev/serial/
+  by-id/...A0:F2:...` scheitert mit "Too many arguments for tpuart!". Also
+  `/dev/ttyACMn` nehmen (wandert bei Re-Enumeration) oder per udev-Regel einen
+  Symlink ohne Doppelpunkte anlegen.
 - **EUL/C6 und EUL/C3 gebaut, aber noch nicht auf Hardware geprueft.** Der
   EUL-Zweig braucht ein EUL32 mit TCM515; EUL-C6 ist noch nicht im Handel.
   Bis dahin gilt fuer die beiden: Layout geprueft, Funktion nicht.
