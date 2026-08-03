@@ -49,7 +49,10 @@
   #define BW_TX        21
   #define BW_RX        20
   #define BW_LED       4
-  #define BW_LED_ACTIVE_LOW 0
+  #define BW_LED_ACTIVE_LOW 1     // on-hardware 2026-08-03: Level 1 = dunkel
+                                  // (Herzschlag lief invertiert: dauerhaft an,
+                                  // 40 ms aus).  Im Legacy-Sketch unsichtbar,
+                                  // weil der die LED nur blinken liess.
   #if defined(BUSWARE_EUL)
     #define BW_TCM_SET 5          // turboPIN der alten TCMTransceiver-Klasse
     #define BW_TCM_RST 3          // resetPIN  der alten TCMTransceiver-Klasse
